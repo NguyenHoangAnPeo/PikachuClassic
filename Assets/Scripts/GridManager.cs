@@ -10,15 +10,15 @@ public class GridManager : MonoBehaviour
     int maxCountTurn = 2;
 
     int countTurn = 0;
-
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => gridSpawner.grid != null);
 
         Cell start = gridSpawner.grid[1, 1];
-        Cell end = gridSpawner.grid[2, 1];
+        Cell end = gridSpawner.grid[4, 5];
 
-        BFS(start, end);
+        var path = FindShortestPath(start, end);
+        HighlightPath(path);
     }
     public List<Cell> GetNeighbors(Cell cell)
     {
@@ -45,50 +45,7 @@ public class GridManager : MonoBehaviour
 
         return neighbors;
     }
-    public void BFS(Cell start, Cell end)
-    {
-        Queue<Node> queue = new Queue<Node>();
-
-        bool[,,] visited = new bool[gridSpawner.width, gridSpawner.height, 4];
-
-        queue.Enqueue(new Node(start, Vector2Int.zero, 0));
-
-        while (queue.Count > 0)
-        {
-            Node currentNode = queue.Dequeue();
-            Cell current = currentNode.cell;
-
-            if (current == end)
-            {
-                Debug.Log("Found!");
-                return;
-            }
-
-            foreach (var next in GetNeighbors(current))
-            {
-                if (next == null || next.isBlocked) continue;
-
-                Vector2Int newDir = new Vector2Int(next.x, next.y) - new Vector2Int(current.x, current.y);
-                int dirIndex = GetDirIndex(newDir); 
-
-                int newTurn = currentNode.turn;
-
-                if (currentNode.dir != Vector2Int.zero && newDir != currentNode.dir)
-                    newTurn++;
-
-                if (newTurn > maxCountTurn) continue;
-
-                if (dirIndex != -1 && visited[next.x, next.y, dirIndex]) continue;
-
-                if (dirIndex != -1)
-                    visited[next.x, next.y, dirIndex] = true;
-
-                next.sprite.color = Color.green;
-
-                queue.Enqueue(new Node(next, newDir, newTurn));
-            }
-        }
-    }
+    
     public Vector2Int LastVector(Cell current, Cell next, Vector2Int lastVector)
     {
         Vector2Int dir = new Vector2Int(next.x, next.y) - new Vector2Int(current.x, current.y);
@@ -113,5 +70,69 @@ public class GridManager : MonoBehaviour
         if (dir == Vector2Int.left) return 2;
         if (dir == Vector2Int.right) return 3;
         return -1;
+    }
+    public List<Cell> FindShortestPath(Cell start, Cell end)
+    {
+        Queue<State> q = new Queue<State>();
+        bool[,,] visited = new bool[gridSpawner.width, gridSpawner.height, 4];
+        Dictionary<State, State> parent = new Dictionary<State, State>(new StateComparer());
+
+        State startState = new State(start, Vector2Int.zero, 0);
+        q.Enqueue(startState);
+
+        State found = default(State);
+        bool hasFound = false;
+
+        while (q.Count > 0)
+        {
+            State cur = q.Dequeue();
+
+            if (cur.cell == end)
+            {
+                found = cur;
+                hasFound = true;
+                break;
+            }
+
+            foreach (var next in GetNeighbors(cur.cell))
+            {
+                if (next == null || next.isBlocked) continue;
+
+                Vector2Int newDir = new Vector2Int(next.x - cur.cell.x, next.y - cur.cell.y);
+                int dirIndex = GetDirIndex(newDir);
+                int newTurn = cur.turn;
+
+                if (cur.dir != Vector2Int.zero && newDir != cur.dir) newTurn++;
+                if (newTurn > maxCountTurn) continue;
+                if (dirIndex != -1 && visited[next.x, next.y, dirIndex]) continue;
+
+                if (dirIndex != -1) visited[next.x, next.y, dirIndex] = true;
+
+                State nxt = new State(next, newDir, newTurn);
+                parent[nxt] = cur;
+                q.Enqueue(nxt);
+            }
+        }
+
+        if (!hasFound) return null;
+
+        List<Cell> path = new List<Cell>();
+        State p = found;
+        path.Add(p.cell);
+
+        while (!(p.cell == start && p.dir == Vector2Int.zero && p.turn == 0))
+        {
+            p = parent[p];
+            path.Add(p.cell);
+        }
+
+        path.Reverse();
+        return path;
+    }
+    public void HighlightPath(List<Cell> path)
+    {
+        if (path == null) return;
+        foreach (var c in path)
+            c.sprite.color = Color.green;
     }
 }
