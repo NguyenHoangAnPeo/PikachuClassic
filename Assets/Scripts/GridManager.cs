@@ -4,22 +4,38 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField] protected static GridManager instance;
+    public static GridManager Instance => instance;
     [SerializeField] protected GridSpawner gridSpawner;
     public GridSpawner GridSpawner => gridSpawner;
+    [SerializeField] protected TileMatchController tileMatchController;
+    public TileMatchController TileMatchController => tileMatchController;
 
     int maxCountTurn = 2;
 
     int countTurn = 0;
-    private IEnumerator Start()
+
+    private void Awake()
     {
-        yield return new WaitUntil(() => gridSpawner.grid != null);
+        if(GridManager.instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        GridManager.instance = this;
 
-        Cell start = gridSpawner.grid[1, 1];
-        Cell end = gridSpawner.grid[4, 5];
-
-        var path = FindShortestPath(start, end);
-        HighlightPath(path);
+        this.tileMatchController = transform.GetComponentInChildren<TileMatchController>();
     }
+    //private IEnumerator Start()
+    //{
+    //    yield return new WaitUntil(() => gridSpawner.grid != null);
+
+    //    Cell start = gridSpawner.grid[1, 1];
+    //    Cell end = gridSpawner.grid[4, 5];
+
+    //    var path = FindShortestPath(start, end);
+    //    HighlightPath(path);
+    //}
     public List<Cell> GetNeighbors(Cell cell)
     {
         List<Cell> neighbors = new List<Cell>();
@@ -134,5 +150,18 @@ public class GridManager : MonoBehaviour
         if (path == null) return;
         foreach (var c in path)
             c.sprite.color = Color.green;
+    }
+    public void UnHighlightPath(List<Cell> path)
+    {
+        if (path == null) return;
+
+        Color color;
+        ColorUtility.TryParseHtmlString("#8A8A8A", out color);
+
+        foreach (var c in path)
+        {
+            if (c == null || c.sprite == null) continue;
+            c.sprite.color = color;
+        }
     }
 }
