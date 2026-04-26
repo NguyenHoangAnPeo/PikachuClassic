@@ -7,8 +7,6 @@ public class PokemonSpawner : MonoBehaviour
     [SerializeField] protected List<Transform> listPokemons = new List<Transform>();
     public List<Transform> ListPokemons => listPokemons;
 
-    [ContextMenu("Load Child Prefabs")]
-
     private void Reset()
     {
         if (listPokemons.Count == 0) LoadPrefabs();
@@ -30,5 +28,15 @@ public class PokemonSpawner : MonoBehaviour
         {
             prefab.gameObject.SetActive(false);
         }
+    }
+    public virtual Transform SpawnPokemonRandom(Vector3 pos, Quaternion ros,Transform parent)
+    {
+        if (listPokemons == null) return null;
+        int index = Random.Range(0, listPokemons.Count);
+        var randomPokemonInList = listPokemons[index];
+
+        Transform finalPokemon = Instantiate(randomPokemonInList, pos, ros, parent);
+        finalPokemon.gameObject.SetActive(true);
+        return finalPokemon;
     }
 }

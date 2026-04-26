@@ -8,6 +8,8 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance => instance;
     [SerializeField] protected GridSpawner gridSpawner;
     public GridSpawner GridSpawner => gridSpawner;
+    [SerializeField] protected PokemonSpawner pokemonSpawner;
+    public PokemonSpawner PokemonSpawner => pokemonSpawner;
     [SerializeField] protected TileMatchController tileMatchController;
     public TileMatchController TileMatchController => tileMatchController;
 
@@ -23,8 +25,22 @@ public class GridManager : MonoBehaviour
             return;
         }
         GridManager.instance = this;
-
+        this.LoadComponent();
+    }
+    private void Reset()
+    {
+        this.LoadComponent();
+    }
+    protected void LoadComponent()
+    {
+        if (this.tileMatchController != null) return;
         this.tileMatchController = transform.GetComponentInChildren<TileMatchController>();
+
+        if (this.pokemonSpawner != null) return;
+        this.pokemonSpawner = transform.GetComponentInChildren<PokemonSpawner>();
+
+        if (this.gridSpawner != null) return;
+        this.gridSpawner = transform.GetComponentInChildren<GridSpawner>();
     }
     //private IEnumerator Start()
     //{

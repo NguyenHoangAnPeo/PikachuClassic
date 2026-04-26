@@ -199,7 +199,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   gridSpawner: {fileID: 2014810382}
-  tileMatchController: {fileID: 0}
+  pokemonSpawner: {fileID: 1695092446}
+  tileMatchController: {fileID: 1297422885}
 --- !u!1 &514775827
 GameObject:
   m_ObjectHideFlags: 0

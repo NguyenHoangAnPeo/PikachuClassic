@@ -14,12 +14,12 @@ public class Cell : MonoBehaviour
     {
         this.sprite = GetComponent<SpriteRenderer>();
     }
-    public void Init(int x, int y, int width, int height)
+    public void Init(int x, int y, bool value)
     {
         this.x = x;
         this.y = y;
 
-        if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+        if (value)
         {
             isBorder = true;
             if (sprite != null)
