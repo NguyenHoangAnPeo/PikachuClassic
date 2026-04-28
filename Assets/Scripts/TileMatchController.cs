@@ -40,9 +40,9 @@ public class TileMatchController : MonoBehaviour
         else
         {
             Debug.Log("UnMatch!");
+            ResetSelection();
             return;
         }
-        this.ResetIdPokemon();
     }
     protected virtual bool IsMatch(Cell firstCell, Cell secondCell, out List<Cell> path)
     {
@@ -69,13 +69,14 @@ public class TileMatchController : MonoBehaviour
 
         GridManager.Instance.UnHighlightPath(path);
 
-        this.firstCell = null;
-        this.secondCell = null;
+        this.ResetSelection();
     }
-    protected virtual void ResetIdPokemon()
+    protected void ResetSelection()
     {
-        this.idSecondPokemon = null;
-        this.idFirstPokemon = null;
+        firstCell = null;
+        secondCell = null;
+        idFirstPokemon = null;
+        idSecondPokemon = null;
     }
     protected virtual bool IsSameId()
     {
