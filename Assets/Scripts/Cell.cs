@@ -7,6 +7,8 @@ public class Cell : MonoBehaviour
     public bool isBlocked = false;
     public bool isBorder = false;
     public bool isVisited = false;
+    [SerializeField] protected Pokemon pokemon;
+    public Pokemon Pokemon => pokemon;
 
     public SpriteRenderer sprite;
 
@@ -18,6 +20,8 @@ public class Cell : MonoBehaviour
     {
         this.x = x;
         this.y = y;
+
+        this.pokemon = transform.GetComponentInChildren<Pokemon>();
 
         if (value)
         {

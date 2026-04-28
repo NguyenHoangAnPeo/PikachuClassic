@@ -701,6 +701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399e0310e018e604d95ed63f9c6c0dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pokemon
+  idPokemon: 2
 --- !u!4 &1300902983329504847
 Transform:
   m_ObjectHideFlags: 0
@@ -728,6 +729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399e0310e018e604d95ed63f9c6c0dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pokemon
+  idPokemon: 0
 --- !u!212 &1424481325855657458
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -846,6 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399e0310e018e604d95ed63f9c6c0dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pokemon
+  idPokemon: 3
 --- !u!4 &3482666449503726892
 Transform:
   m_ObjectHideFlags: 0
@@ -908,6 +911,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 399e0310e018e604d95ed63f9c6c0dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pokemon
+  idPokemon: 1
 --- !u!1 &4551511681512371838
 GameObject:
   m_ObjectHideFlags: 0
