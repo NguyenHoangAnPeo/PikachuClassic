@@ -34,6 +34,8 @@ public class TileMatchController : MonoBehaviour
         if (IsMatch(firstCell, secondCell, out path))
         {
             Debug.Log("Match!");
+            firstCell.RemovePokemon();
+            secondCell.RemovePokemon();
 
             StartCoroutine(RemoveCell(path));
         }

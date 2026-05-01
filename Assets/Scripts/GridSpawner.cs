@@ -7,6 +7,9 @@ public class GridSpawner : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject holders;
 
+    [SerializeField] protected int pokemonCount = 0;
+    public int PokemonCount => pokemonCount;
+
     public int width = 7;
     public int height = 7;
 
@@ -38,6 +41,7 @@ public class GridSpawner : MonoBehaviour
 
                 if(!IsBorder(x, y, width, height))
                 GridManager.Instance.PokemonSpawner.SpawnPokemonRandom(cell.transform.position, cell.transform.rotation, cell.transform);
+                this.pokemonCount++;
 
                 Cell data = cell.GetComponent<Cell>();
                 data.Init(x, y,this.IsBorder(x,y,width,height));
@@ -57,4 +61,9 @@ public class GridSpawner : MonoBehaviour
         }
         else return false;
     }
+    public virtual void SetPokemonCount(int value)
+    {
+        this.pokemonCount = value;
+    }
+    //ToDO bool IsEndGame return pokemonCount;
 }

@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cell : MonoBehaviour
@@ -30,6 +31,14 @@ public class Cell : MonoBehaviour
             {
                 sprite.enabled = false;
             }
+        }
+    }
+    public void RemovePokemon()
+    {
+        if (pokemon != null)
+        {
+            Destroy(pokemon.gameObject);
+            pokemon = null;
         }
     }
 }
