@@ -599,8 +599,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridSpawner
   cellPrefab: {fileID: 3480487434530511004, guid: f573292bbea39f04ab0a6cb64117d29a, type: 3}
   holders: {fileID: 209322102}
-  width: 7
-  height: 7
+  pokemonSpawner: {fileID: 1695092446}
+  playableCellCount: 0
+  width: 8
+  height: 8
+  pairIds: 
 --- !u!4 &96531700817056208
 Transform:
   m_ObjectHideFlags: 0

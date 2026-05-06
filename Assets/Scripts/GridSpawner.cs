@@ -7,8 +7,11 @@ public class GridSpawner : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject holders;
 
-    [SerializeField] protected int pokemonCount = 0;
-    public int PokemonCount => pokemonCount;
+    [SerializeField] protected PokemonSpawner pokemonSpawner;
+    public PokemonSpawner PokemonSpawner => pokemonSpawner;
+
+    [SerializeField] protected int playableCellCount = 0;
+    public int PlayableCellCount => playableCellCount;
 
     public int width = 7;
     public int height = 7;
@@ -17,9 +20,27 @@ public class GridSpawner : MonoBehaviour
 
     public Cell[,] grid;
 
-    protected void Start()
+    [SerializeField] protected List<int> pairIds;
+    public List<int> PairId => pairIds;
+
+    protected void Awake()
     {
+        this.SetPlayableCellCount();
+        this.LoadPairIds();
         this.SpawnGrid();
+    }
+    protected virtual void LoadPairIds()
+    {
+        for(int i = 0; i < playableCellCount / 2; ++i)
+        {
+            List<int> keys = new List<int>(pokemonSpawner.PokemonDict.Keys);
+            int randomId = keys[Random.Range(0, keys.Count)];
+
+            pairIds.Add(randomId);
+            pairIds.Add(randomId);
+
+            Shuffle(pairIds);
+        }
     }
     protected virtual void SpawnGrid()
     {
@@ -40,8 +61,7 @@ public class GridSpawner : MonoBehaviour
                 GameObject cell = Instantiate(cellPrefab, pos, Quaternion.identity);
 
                 if(!IsBorder(x, y, width, height))
-                GridManager.Instance.PokemonSpawner.SpawnPokemonRandom(cell.transform.position, cell.transform.rotation, cell.transform);
-                this.pokemonCount++;
+                GridManager.Instance.PokemonSpawner.SpawnPokemonById(this.GetIdInPairIds(),cell.transform.position, cell.transform.rotation, cell.transform);
 
                 Cell data = cell.GetComponent<Cell>();
                 data.Init(x, y,this.IsBorder(x,y,width,height));
@@ -61,9 +81,34 @@ public class GridSpawner : MonoBehaviour
         }
         else return false;
     }
-    public virtual void SetPokemonCount(int value)
+    protected virtual void SetPlayableCellCount()
     {
-        this.pokemonCount = value;
+        playableCellCount = (width - 2) * (height - 2);
+
+        if(playableCellCount % 2 != 0)
+        {
+            Debug.LogWarning("So o pokemon bi le");
+        }
+        else
+        {
+            Debug.Log("So o pokemon hop le");
+        }
+    }
+    void Shuffle(List<int> list)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            int randomIndex = Random.Range(i, list.Count);
+
+            int temp = list[i];
+            list[i] = list[randomIndex];
+            list[randomIndex] = temp;
+        }
+    }
+    protected virtual int GetIdInPairIds()
+    {
+        int randomId = pairIds[Random.Range(0, pairIds.Count)];
+        return randomId;
     }
     //ToDO bool IsEndGame return pokemonCount;
 }
