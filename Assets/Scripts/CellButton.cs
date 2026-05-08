@@ -7,12 +7,15 @@ public class CellButton : MonoBehaviour
 
     private void Awake()
     {
-        this.cell = GetComponentInParent<Cell>();
+        this.cell = GetComponent<Cell>();
     }
 
     private void OnMouseDown()
     {
+        //if (cell == null || cell.Pokemon == null) return;
+
         if (GridManager.Instance.TileMatchController.SecondCell != null) return;
+
         GridManager.Instance.TileMatchController.SelectedCell(cell);
         Debug.Log("Click: " + cell.x + "," + cell.y);
     }

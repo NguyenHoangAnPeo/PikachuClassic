@@ -7,6 +7,9 @@ public class GridSpawner : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject holders;
 
+    [SerializeField] protected List<Transform> listCell;
+    public List<Transform> ListCell => listCell;
+
     [SerializeField] protected PokemonSpawner pokemonSpawner;
     public PokemonSpawner PokemonSpawner => pokemonSpawner;
 
@@ -28,6 +31,7 @@ public class GridSpawner : MonoBehaviour
         this.SetPlayableCellCount();
         this.LoadPairIds();
         this.SpawnGrid();
+        this.SpawnPokemon();
     }
     protected virtual void LoadPairIds()
     {
@@ -61,7 +65,9 @@ public class GridSpawner : MonoBehaviour
                 GameObject cell = Instantiate(cellPrefab, pos, Quaternion.identity);
 
                 if(!IsBorder(x, y, width, height))
-                GridManager.Instance.PokemonSpawner.SpawnPokemonById(this.GetIdInPairIds(),cell.transform.position, cell.transform.rotation, cell.transform);
+                {
+                    listCell.Add(cell.transform);
+                }
 
                 Cell data = cell.GetComponent<Cell>();
                 data.Init(x, y,this.IsBorder(x,y,width,height));
@@ -105,10 +111,17 @@ public class GridSpawner : MonoBehaviour
             list[randomIndex] = temp;
         }
     }
-    protected virtual int GetIdInPairIds()
+    protected void SpawnPokemon()
     {
-        int randomId = pairIds[Random.Range(0, pairIds.Count)];
-        return randomId;
+        for(int i = 0;i < pairIds.Count;i++)
+        {
+            Transform cell = listCell[i];
+            GridManager.Instance.PokemonSpawner.SpawnPokemonById(GetId(i), cell.transform.position, cell.transform.rotation, cell.transform);
+        }
+    }
+    protected virtual int GetId(int i)
+    {
+        return pairIds[i];
     }
     //ToDO bool IsEndGame return pokemonCount;
 }
