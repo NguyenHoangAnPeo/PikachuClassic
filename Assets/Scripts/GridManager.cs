@@ -105,6 +105,8 @@ public class GridManager : MonoBehaviour
     }
     public List<Cell> FindShortestPath(Cell start, Cell end)
     {
+        if (start == null || end == null) return null;
+
         Queue<State> q = new Queue<State>();
         bool[,,] visited = new bool[gridSpawner.width, gridSpawner.height, 4];
         Dictionary<State, State> parent = new Dictionary<State, State>(new StateComparer());
@@ -128,7 +130,9 @@ public class GridManager : MonoBehaviour
 
             foreach (var next in GetNeighbors(cur.cell))
             {
-                if (next == null || next.isBlocked) continue;
+                if (next == null) continue;
+                bool isTargetCell = next == end;
+                if (!isTargetCell && next.isBlocked) continue;
 
                 Vector2Int newDir = new Vector2Int(next.x - cur.cell.x, next.y - cur.cell.y);
                 int dirIndex = GetDirIndex(newDir);

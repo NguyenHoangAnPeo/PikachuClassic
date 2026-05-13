@@ -25,6 +25,7 @@ public class Cell : MonoBehaviour
     {
         this.x = x;
         this.y = y;
+        isBlocked = !value;
 
         if (value)
         {
