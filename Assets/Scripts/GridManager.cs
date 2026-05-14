@@ -107,19 +107,19 @@ public class GridManager : MonoBehaviour
     {
         if (start == null || end == null) return null;
 
-        Queue<State> q = new Queue<State>();
+        Queue<PathNode> q = new Queue<PathNode>();
         bool[,,] visited = new bool[gridSpawner.width, gridSpawner.height, 4];
-        Dictionary<State, State> parent = new Dictionary<State, State>(new StateComparer());
+        Dictionary<PathNode, PathNode> parent = new Dictionary<PathNode, PathNode>(new PathNodeComparer());
 
-        State startState = new State(start, Vector2Int.zero, 0);
+        PathNode startState = new PathNode(start, Vector2Int.zero, 0);
         q.Enqueue(startState);
 
-        State found = default(State);
+        PathNode found = default(PathNode);
         bool hasFound = false;
 
         while (q.Count > 0)
         {
-            State cur = q.Dequeue();
+            PathNode cur = q.Dequeue();
 
             if (cur.cell == end)
             {
@@ -144,7 +144,7 @@ public class GridManager : MonoBehaviour
 
                 if (dirIndex != -1) visited[next.x, next.y, dirIndex] = true;
 
-                State nxt = new State(next, newDir, newTurn);
+                PathNode nxt = new PathNode(next, newDir, newTurn);
                 parent[nxt] = cur;
                 q.Enqueue(nxt);
             }
@@ -153,7 +153,7 @@ public class GridManager : MonoBehaviour
         if (!hasFound) return null;
 
         List<Cell> path = new List<Cell>();
-        State p = found;
+        PathNode p = found;
         path.Add(p.cell);
 
         while (!(p.cell == start && p.dir == Vector2Int.zero && p.turn == 0))
