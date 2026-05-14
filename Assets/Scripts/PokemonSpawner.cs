@@ -4,11 +4,11 @@ using UnityEngine;
 public class PokemonSpawner : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] protected List<Transform> listPokemons = new List<Transform>();
-    public List<Transform> ListPokemons => listPokemons;
+    [SerializeField] protected List<Pokemon> listPokemons = new List<Pokemon>();
+    public List<Pokemon> ListPokemons => listPokemons;
 
-    [SerializeField] protected Dictionary<int, Transform> pokemonDict = new Dictionary<int, Transform>();
-    public Dictionary<int, Transform> PokemonDict => pokemonDict;
+    [SerializeField] protected Dictionary<int, Pokemon> pokemonDict = new Dictionary<int, Pokemon>();
+    public Dictionary<int, Pokemon> PokemonDict => pokemonDict;
 
     private void Awake()
     {
@@ -25,46 +25,51 @@ public class PokemonSpawner : MonoBehaviour
         if (this.listPokemons.Count > 0) return;
 
         Transform prefabObj = transform.Find("Prefabs");
+
         foreach (Transform prefab in prefabObj)
         {
-            listPokemons.Add(prefab);
+            Pokemon p = prefab.GetComponent<Pokemon>();
+
+            if(p != null)
+            {
+                listPokemons.Add(p);
+            }
+            else
+            {
+                Debug.LogWarning("Prefab thieu pokemon script: " + prefab.name);
+            }
         }
         this.HidePrefabs();
     }
     protected virtual void HidePrefabs()
     {
-        foreach (Transform prefab in listPokemons)
+        foreach (Pokemon p in listPokemons)
         {
-            prefab.gameObject.SetActive(false);
+            p.gameObject.SetActive(false);
         }
     }
-    public virtual Transform SpawnPokemonById(int id, Vector3 pos, Quaternion ros, Transform parent)
+    public virtual Pokemon SpawnPokemonById(int id, Vector3 pos, Quaternion ros,Cell cell)
     {
         if (!CanSpawnPokemon(id)) return null;
 
-        Transform finalPokemon = Instantiate(pokemonDict[id], pos, ros, parent);
+        Pokemon finalPokemon = Instantiate(pokemonDict[id], pos, ros, cell.transform);
+
         finalPokemon.gameObject.SetActive(true);
+
+        cell.SetPokemon(finalPokemon);
+
         return finalPokemon;
     }
     protected virtual void LoadPokemonDict()
     {
-        foreach (Transform p in listPokemons)
+        foreach (Pokemon p in listPokemons)
         {
-            Pokemon pokemonComponent = p.GetComponent<Pokemon>();
-
-            if (pokemonComponent == null)
-            {
-                Debug.LogWarning("Prefab.Component Pokemon null: " + p.name);
-                continue;
-            }
-
-            int id = pokemonComponent.IdPokemon;
+            int id = p.IdPokemon;
 
             if (!pokemonDict.ContainsKey(id))
             {
                 pokemonDict.Add(id, p);
             }
-
             else
             {
                 Debug.LogWarning("Trung ID Pokemon: " + id);

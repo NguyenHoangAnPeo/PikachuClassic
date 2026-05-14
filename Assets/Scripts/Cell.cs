@@ -17,10 +17,7 @@ public class Cell : MonoBehaviour
     {
         this.sprite = GetComponent<SpriteRenderer>();
     }
-    private void Start()
-    {
-        this.pokemon = transform.GetComponentInChildren<Pokemon>();
-    }
+
     public void Init(int x, int y, bool value)
     {
         this.x = x;
@@ -35,6 +32,11 @@ public class Cell : MonoBehaviour
                 sprite.enabled = false;
             }
         }
+    }
+    public virtual void SetPokemon(Pokemon p)
+    {
+        this.pokemon = p;
+        isBlocked = (p != null);
     }
     public void RemovePokemon()
     {
