@@ -1,5 +1,6 @@
 public enum GameState
 {
+    SelectLevel,
     Init,
     Start,
     Playing,

@@ -6,27 +6,35 @@ public class Time : BaseGameStateHandler
     [SerializeField] protected float timeLeft = 60f;
     public float TimeLeft => timeLeft;
 
+    protected float timeMax;
+
     public event Action<float> OnTimeChanged;
 
     [SerializeField] protected bool isPlaying;
+
+    private void Awake()
+    {
+        this.SetDataLevel();
+    }
     private void Update()
     {
         this.RunTimeCoolDown();
     }
     public virtual void SetTimeLeft(float p)
     {
-        this.timeLeft = p;
+        this.timeMax = p;
+        this.timeLeft = timeMax;
     }
     public bool IsLose()
     {
-        return timeLeft == 0;
+        return timeLeft <= 0;
     }
     protected void RunTimeCoolDown()
     {
         if (!isPlaying) return;
         if (timeLeft > 0)
         {
-            timeLeft -= UnityEngine.Time.deltaTime;
+            timeLeft = Mathf.Max(0f, timeLeft - UnityEngine.Time.deltaTime);
 
             OnTimeChanged?.Invoke(timeLeft);
         }
@@ -43,8 +51,15 @@ public class Time : BaseGameStateHandler
         stateHandlers.Add(GameState.Paused, PauseTimer);
         stateHandlers.Add(GameState.Lose, PauseTimer);
     }
+    protected virtual void SetDataLevel()
+    {
+        var currentLevel = GameManager.Instance.CurrentLevel;
+
+        this.SetTimeLeft(currentLevel.timeLimit);
+    }
     private void StartTimer()
     {
+        this.timeLeft = timeMax;
         isPlaying = true;
     }
     private void ResumeTimer()

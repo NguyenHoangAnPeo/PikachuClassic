@@ -25,6 +25,7 @@ public class GameSessionController : MonoBehaviour
             return;
         }
         GameSessionController.instance = this;
+        DontDestroyOnLoad(gameObject);
     }
     private void Start()
     {

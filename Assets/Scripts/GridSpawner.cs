@@ -15,8 +15,8 @@ public class GridSpawner : MonoBehaviour
     [SerializeField] protected int playableCellCount = 0;
     public int PlayableCellCount => playableCellCount;
 
-    public int width = 7;
-    public int height = 7;
+    public int width;
+    public int height;
 
     float cellSize = 1.2f;
 
@@ -27,12 +27,19 @@ public class GridSpawner : MonoBehaviour
 
     protected void Awake()
     {
+        this.SetDataLevel();
         this.SetPlayableCellCount();
         this.LoadPairIds();
         this.SpawnGrid();
         this.SpawnPokemon();
     }
+    protected virtual void SetDataLevel()
+    {
+        var currentLevel = GameManager.Instance.CurrentLevel;
 
+        this.width = currentLevel.width;
+        this.height = currentLevel.height;
+    }
     protected virtual void LoadPairIds()
     {
         List<int> keys = new List<int>(pokemonSpawner.PokemonDict.Keys);
