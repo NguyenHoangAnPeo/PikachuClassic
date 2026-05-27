@@ -12,6 +12,9 @@ public class GridManager : MonoBehaviour
     public PokemonSpawner PokemonSpawner => pokemonSpawner;
     [SerializeField] protected TileMatchController tileMatchController;
     public TileMatchController TileMatchController => tileMatchController;
+    [SerializeField] protected PathVisualizer pathVisualizer;
+    public PathVisualizer PathVisualizer => pathVisualizer;
+
 
     int maxCountTurn = 2;
 
@@ -41,6 +44,9 @@ public class GridManager : MonoBehaviour
 
         if (this.gridSpawner != null) return;
         this.gridSpawner = transform.GetComponentInChildren<GridSpawner>();
+
+        if (this.pathVisualizer != null) return;
+        this.pathVisualizer = transform.GetComponentInChildren<PathVisualizer>();
     }
     //private IEnumerator Start()
     //{

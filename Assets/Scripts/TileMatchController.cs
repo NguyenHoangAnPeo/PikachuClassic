@@ -59,7 +59,7 @@ public class TileMatchController : MonoBehaviour
 
             if (path == null) return false;
 
-            GridManager.Instance.HighlightPath(path);
+            GridManager.Instance.PathVisualizer.ShowPath(path);
 
             return true;
         }
@@ -69,7 +69,7 @@ public class TileMatchController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
 
-        GridManager.Instance.UnHighlightPath(path);
+        GridManager.Instance.PathVisualizer.ClearPath();
 
         this.ResetSelection();
     }
