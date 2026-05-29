@@ -11,9 +11,17 @@ public class Time : BaseGameStateHandler
     public event Action<float> OnTimeChanged;
 
     [SerializeField] protected bool isPlaying;
-
-    private void Awake()
+    private void Start()
     {
+        if(GameSessionController.Instance == null)return;
+
+        GameSessionController.Instance.SetGameState(GameState.Playing);
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
         this.SetDataLevel();
     }
     private void Update()
@@ -46,6 +54,7 @@ public class Time : BaseGameStateHandler
 
     protected override void RegisterState()
     {
+        Debug.Log("RegisterState CALLED");
         stateHandlers.Add(GameState.Start, StartTimer);
         stateHandlers.Add(GameState.Playing, ResumeTimer);
         stateHandlers.Add(GameState.Paused, PauseTimer);

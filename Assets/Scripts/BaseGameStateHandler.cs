@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class BaseGameStateHandler : MonoBehaviour
 {
     protected Dictionary<GameState, Action> stateHandlers;
-    protected void Awake()
+    protected virtual void Awake()
     {
         stateHandlers = new Dictionary<GameState, Action>();
         RegisterState();
