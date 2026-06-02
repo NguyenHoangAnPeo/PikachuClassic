@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileMatchController : MonoBehaviour
+public class TileMatchController : AnMonoBehaviour
 {
+    [SerializeField] protected GridManager gridManager;
+    public GridManager GridManager => gridManager;
     [SerializeField] protected Cell firstCell = null;
     public Cell FirstCell => firstCell;
     [SerializeField] protected Cell secondCell = null;
@@ -12,6 +14,28 @@ public class TileMatchController : MonoBehaviour
     [SerializeField] protected int? idFirstPokemon = null;
 
     [SerializeField] protected int? idSecondPokemon;
+    [SerializeField] protected int remainingPokemon;
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadGridManager();
+    }
+    protected override void Start()
+    {
+        this.LoadRemainingPokemon(); //Can hoi xem dat ham o day hop li k, cos cach khac hon k
+    }
+    protected virtual void LoadGridManager()
+    {
+        if (this.gridManager != null) return;
+        this.gridManager = transform.GetComponentInParent<GridManager>();
+    }
+    protected virtual void LoadRemainingPokemon()
+    {
+        int t = gridManager.GridSpawner.PlayableCellCount;
+
+        if (t == 0) return;
+        this.SetRemainingPokemon(t);
+    }
     public void SelectedCell(Cell cell)
     {
         if (cell == firstCell) return;
@@ -21,13 +45,11 @@ public class TileMatchController : MonoBehaviour
 
             this.idFirstPokemon = cell.Pokemon.IdPokemon;
 
-            //Highlight(cell, true);
             return;
         }
         secondCell = cell;
 
         this.idSecondPokemon = cell.Pokemon.IdPokemon;
-        //Highlight(cell, true);
 
         List<Cell> path = GridManager.Instance.FindShortestPath(firstCell, secondCell);
 
@@ -38,6 +60,7 @@ public class TileMatchController : MonoBehaviour
             secondCell.RemovePokemon();
 
             StartCoroutine(RemoveCell(path));
+            this.SubtractionPokemon();
         }
         else
         {
@@ -85,5 +108,17 @@ public class TileMatchController : MonoBehaviour
         if (this.idFirstPokemon == null || this.idSecondPokemon == null) return false;
         if (this.idFirstPokemon == this.idSecondPokemon) return true;
         else return false;
+    }
+    protected virtual void SubtractionPokemon()
+    {
+        remainingPokemon = remainingPokemon - 2;
+        if(this.remainingPokemon == 0)
+        {
+            GameStateManager.Instance.ChangeState(GameState.Win);
+        }
+    }
+    protected void SetRemainingPokemon(int t)
+    {
+        this.remainingPokemon = t;
     }
 }
