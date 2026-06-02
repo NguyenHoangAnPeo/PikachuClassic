@@ -4,6 +4,6 @@ public class LevelSelectBtn : BaseBtn
 {
     protected override void OnClick()
     {
-        GameSessionController.Instance.SetGameState(GameState.SelectLevel);
+        GameStateManager.Instance.ChangeState(GameState.SelectLevel);
     }
 }

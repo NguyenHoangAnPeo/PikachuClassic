@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Time : BaseGameStateHandler
+public class Time : AnMonoBehaviour,IGameStateListener
 {
     [SerializeField] protected float timeLeft = 60f;
     public float TimeLeft => timeLeft;
@@ -11,11 +11,20 @@ public class Time : BaseGameStateHandler
     public event Action<float> OnTimeChanged;
 
     [SerializeField] protected bool isPlaying;
-    private void Start()
+    protected override void OnEnable()
     {
-        if(GameSessionController.Instance == null)return;
+        GameStateManager.Instance.RegisterListener(this);
+    }
 
-        GameSessionController.Instance.SetGameState(GameState.Playing);
+    private void OnDisable()
+    {
+        GameStateManager.Instance.UnregisterListener(this);
+    }
+    protected override void Start()
+    {
+        if(GameStateManager.Instance == null)return;
+
+        GameStateManager.Instance.ChangeState(GameState.Playing);
     }
 
     protected override void Awake()
@@ -48,23 +57,26 @@ public class Time : BaseGameStateHandler
         }
         else
         {
-            GameSessionController.Instance.SetGameState(GameState.Lose);
+            GameStateManager.Instance.ChangeState(GameState.Lose);
         }
-    }
-
-    protected override void RegisterState()
-    {
-        Debug.Log("RegisterState CALLED");
-        stateHandlers.Add(GameState.Start, StartTimer);
-        stateHandlers.Add(GameState.Playing, ResumeTimer);
-        stateHandlers.Add(GameState.Paused, PauseTimer);
-        stateHandlers.Add(GameState.Lose, PauseTimer);
     }
     protected virtual void SetDataLevel()
     {
         var currentLevel = GameManager.Instance.CurrentLevel;
 
         this.SetTimeLeft(currentLevel.timeLimit);
+    }
+    public void OnGameStateChanged(GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.Playing:
+                this.StartTimer();
+                break;
+            case GameState.Paused:
+                this.PauseTimer();
+                break;
+        }
     }
     private void StartTimer()
     {
