@@ -9,7 +9,6 @@ public class LevelBtn : BaseBtn
     {
         if (this.levelConfig == null) return;
 
-        GameManager.Instance.SetCurrentLevel(this.levelConfig);
-        SceneManager.LoadScene("GameScene");
+        LevelManager.Instance.PlayLevel(this.levelConfig);
     }
 }

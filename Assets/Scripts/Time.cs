@@ -62,7 +62,7 @@ public class Time : AnMonoBehaviour,IGameStateListener
     }
     protected virtual void SetDataLevel()
     {
-        var currentLevel = GameManager.Instance.CurrentLevel;
+        var currentLevel = LevelManager.Instance.CurrentLevel;
 
         this.SetTimeLeft(currentLevel.timeLimit);
     }

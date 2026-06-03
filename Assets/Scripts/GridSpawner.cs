@@ -35,7 +35,7 @@ public class GridSpawner : MonoBehaviour
     }
     protected virtual void SetDataLevel()
     {
-        var currentLevel = GameManager.Instance.CurrentLevel;
+        var currentLevel = LevelManager.Instance.CurrentLevel;
 
         this.width = currentLevel.width;
         this.height = currentLevel.height;
