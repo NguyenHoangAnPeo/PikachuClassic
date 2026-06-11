@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,5 +11,10 @@ public class LevelBtn : BaseBtn
         if (this.levelConfig == null) return;
 
         LevelManager.Instance.PlayLevel(this.levelConfig);
+    }
+    public void TrySetBtnUnLocked(bool value)
+    {
+        button.interactable = value;
+        Debug.Log("Da set btn = " + value);
     }
 }
