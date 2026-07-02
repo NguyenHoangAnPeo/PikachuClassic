@@ -27,8 +27,10 @@ public class SetDataBtnLevel : AnMonoBehaviour
         this.levelSaveData = SaveManager.Instance.GetLevelData(levelBtn.LevelConfig.levelCount);
 
         bool value = levelSaveData.isUnlocked;
-        Debug.Log("Level Unlocked = " + value);
+  
         this.SetBtn(value);
+
+        Debug.Log(levelBtn.LevelConfig.levelCount);
     }
     protected virtual void SetBtn(bool value)
     {

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf6088045922f80498634b93a884576d, type: 3}
-  m_Name: Level6
+  m_Name: Level0
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  levelCount: 6
-  width: 14
-  height: 8
-  timeLimit: 150
+  levelCount: 1
+  width: 6
+  height: 6
+  timeLimit: 60

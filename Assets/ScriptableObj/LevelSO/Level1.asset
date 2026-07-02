@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf6088045922f80498634b93a884576d, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: Assembly-CSharp::LevelConfig
-  levelCount: 1
+  levelCount: 2
   width: 6
-  height: 6
+  height: 8
   timeLimit: 60
