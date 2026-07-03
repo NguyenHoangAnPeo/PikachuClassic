@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ResultUICtrl : AnMonoBehaviour,IGameStateListener
 {
-    [SerializeField] protected List<Transform> winUIs;
-    [SerializeField] protected List<Transform> loseUIs;
+    [SerializeField] protected List<Transform> winPanel;
+    [SerializeField] protected List<Transform> losePanel;
 
     protected override void OnEnable()
     {
@@ -32,26 +32,26 @@ public class ResultUICtrl : AnMonoBehaviour,IGameStateListener
     }
     protected void ShowLosePanel()
     {
-        foreach(Transform t in loseUIs)
+        foreach(Transform t in losePanel)
         {
             t.gameObject.SetActive(true);
         }
     }
     protected void ShowWinPanel()
     {
-        foreach (Transform t in winUIs)
+        foreach (Transform t in winPanel)
         {
             t.gameObject.SetActive(true);
         }
     }
     protected void HideAllPanels()
     {
-        foreach (Transform t in loseUIs)
+        foreach (Transform t in losePanel)
         {
             t.gameObject.SetActive(false);
         }
 
-        foreach (Transform t in winUIs)
+        foreach (Transform t in winPanel)
         {
             t.gameObject.SetActive(false);
         }

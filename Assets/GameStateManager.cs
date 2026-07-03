@@ -38,6 +38,7 @@ public class GameStateManager : AnMonoBehaviour
     public void ChangeState(GameState newState)
     {
         currentState = newState;
+        Debug.Log("New State = " + currentState);
 
         foreach (var listener in listeners)
         {
